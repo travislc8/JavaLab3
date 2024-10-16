@@ -8,6 +8,8 @@ public class Main {
             System.exit(1);
         }
         data.printData(25);
+        data.sortByColumn(7);
+        data.printData(25);
 
     }
 }

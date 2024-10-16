@@ -84,4 +84,7 @@ public class DataReader {
         data.printDataPoint(row_num);
     }
 
+    public void sortByColumn(int column_num) {
+        data.sortByColumn(column_num);
+    }
 }
