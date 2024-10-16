@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Util {
     /**
      * Test dirver
@@ -17,6 +19,107 @@ public class Util {
         else {
             System.out.println("Util Test Fail");
         }
+    }
+
+    public static IndexValueData[] sortData(IndexValueData[] data, int length) {
+        for (int i = 2; i <= length; i *= 2) {
+            int k = 0;
+            do {
+                int start = k, end = k + i;
+                if (end > length) {
+                    end = length;
+                }
+                int mid = start + ((end - start) / 2);
+                int left_length = mid - start;
+                int right_length = end - mid;
+                var left_array = Arrays.copyOfRange(data, start, mid);
+                var right_array = Arrays.copyOfRange(data, mid, end);
+                var temp_array = merge(left_length, left_array, right_length, right_array);
+                int temp_index = 0;
+                for (int j = start; j < end; j++) {
+                    data[j].set(temp_array[temp_index]);
+                    temp_index += 1;
+                }
+                k += i;
+            } while (k < length);
+        }
+
+        return data;
+    }
+
+    public static IndexValueData[] merge(int left_length, IndexValueData[] left,
+            int right_length, IndexValueData[] right) {
+        int length = left_length + right_length;
+        var new_array = new IndexValueData[length];
+        for (int i = 0; i < length; i++) {
+            new_array[i] = new IndexValueData();
+        }
+        int i = 0, j = 0, k = 0;
+
+        // while there are items in both arrays
+        while (i < left_length && j < right_length) {
+            if (left[i].compareTo(right[j]) < 0) {
+                new_array[k].set(left[i]);
+                i += 1;
+            } else {
+                new_array[k].set(right[j]);
+                j += 1;
+            }
+            k += 1;
+        }
+
+        // if the left array has items left
+        while (i < left_length) {
+            new_array[k].set(left[i]);
+            i += 1;
+            k += 1;
+        }
+
+        // if the right array has items left
+        while (j < right_length) {
+            new_array[k].set(right[j]);
+            j += 1;
+            k += 1;
+        }
+
+        return new_array;
+    }
+
+    public static IndexValueData[] sortData3(IndexValueData[] data, int length) {
+        var new_array = new IndexValueData[length];
+        if (length > 1) {
+            // split the array
+            int mid = length / 2;
+            var left_array = Arrays.copyOfRange(data, 0, mid);
+            var right_array = Arrays.copyOfRange(data, mid, length);
+            int left_length = mid;
+            int right_length = length - mid;
+            if ((length % 2) == 1)
+                right_length += 1;
+            // calls merge sort on each half
+            left_array = sortData(left_array, left_length);
+            right_array = sortData(right_array, right_length);
+            merge(left_length, left_array, right_length, right_array);
+        } else {
+            new_array = data;
+        }
+
+        return new_array;
+    }
+
+    public static IndexValueData[] sortData2(IndexValueData[] data, int length) {
+        // IndexValueData[] new_data = new IndexValueData[length];
+        IndexValueData temp = new IndexValueData(0, "");
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < (length - i - 1); j++) {
+                if (data[j].compareTo(data[j + 1]) >= 0) {
+                    temp.set(data[j + 1]);
+                    data[j + 1].set(data[j]);
+                    data[j].set(temp);
+                }
+            }
+        }
+        return data;
     }
 
     public static String rightPadString(String string, int length) {

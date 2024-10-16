@@ -4,6 +4,13 @@ public class IndexValueData implements Comparable<IndexValueData> {
     private int numValue;
     private boolean isNumValue;
 
+    public IndexValueData() {
+        index = 0;
+        stringValue = "";
+        numValue = 0;
+        isNumValue = false;
+    }
+
     public IndexValueData(int index, String value) {
         this.index = index;
         this.stringValue = value;
@@ -55,7 +62,7 @@ public class IndexValueData implements Comparable<IndexValueData> {
         if (isNumValue) {
             return this.numValue - other.numValue;
         } else {
-            return this.stringValue.compareToIgnoreCase(other.stringValue);
+            return this.stringValue.compareToIgnoreCase(other.getStringValue());
         }
     }
 }

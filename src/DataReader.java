@@ -4,23 +4,27 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class DataReader {
-    private Data data;
-    private String fileName = "data/data.csv";
+    public final String FILENAME = "data/data.csv";
+    private String fileName = FILENAME;
     private File dataFile;
     private Scanner fileReader;
     private ArrayList<String> fileContents = new ArrayList<>();
     private boolean dataRead;
 
-    public DataReader() {
+    public void init() {
         // opens the file and if fails to open, terminates the program
         if (!openFile()) {
             dataRead = false;
-            return;
+            System.out.println("Could not read file. Exiting program");
+            System.exit(1);
         } else {
             dataRead = true;
         }
         readFile();
-        data = new Data(fileContents);
+    }
+
+    public ArrayList<String> getData() {
+        return fileContents;
     }
 
     public boolean hasData() {
@@ -54,37 +58,5 @@ public class DataReader {
 
         // closes the file
         fileReader.close();
-    }
-
-    public void printData() {
-        data.printHeader();
-        // prints all of the rows
-        for (int i = 0; i < data.getRowCount(); i++) {
-            data.printDataPoint(i);
-        }
-    }
-
-    public void printData(int count) {
-        data.printHeader();
-        // caps the count to the max
-        if (count > data.getRowCount())
-            count = data.getRowCount();
-
-        // prints count number of rows
-        for (int i = 0; i < count; i++) {
-            data.printDataPoint(i);
-        }
-    }
-
-    public void printHeader() {
-        data.printHeader();
-    }
-
-    public void printRow(int row_num) {
-        data.printDataPoint(row_num);
-    }
-
-    public void sortByColumn(int column_num) {
-        data.sortByColumn(column_num);
     }
 }

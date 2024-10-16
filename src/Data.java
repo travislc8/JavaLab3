@@ -1,12 +1,22 @@
 import java.util.ArrayList;
 
+/**
+ * some explanation
+ */
 public class Data {
     private ArrayList<ArrayList<String>> dataPoints = new ArrayList<>();
     private ArrayList<String> columnNames = new ArrayList<>();
-    private ArrayList<String> fileContents = new ArrayList<>();
     private ArrayList<Integer> columnWidth = new ArrayList<>();
 
+    public Data() {
+    }
+
     public Data(ArrayList<String> fileContents) {
+        init(fileContents);
+    }
+
+    public void init(ArrayList<String> fileContents) {
+
         // initializes the column width array
         setColumnWidth(fileContents.get(0));
 
@@ -17,6 +27,7 @@ public class Data {
         for (int i = 1; i < fileContents.size(); i += 1) {
             dataPoints.add(getRowData(fileContents.get(i)));
         }
+
     }
 
     private ArrayList<String> getRowData(String row_string) {
@@ -59,16 +70,22 @@ public class Data {
     }
 
     public void printData() {
-        for (String item : columnNames) {
-            System.out.print(item + "     ");
+        printHeader();
+        // prints all of the rows
+        for (int i = 0; i < getRowCount(); i++) {
+            printDataPoint(i);
         }
+    }
 
-        for (ArrayList<String> row : dataPoints) {
-            for (String item : row) {
-                System.out.print(item + "     ");
-            }
-            System.out.println();
+    public void printData(int count) {
+        printHeader();
+        // caps the count to the max
+        if (count > getRowCount())
+            count = getRowCount();
 
+        // prints count number of rows
+        for (int i = 0; i < count; i++) {
+            printDataPoint(i);
         }
     }
 
@@ -136,14 +153,12 @@ public class Data {
             array[i] = new IndexValueData(i, dataPoints.get(i).get(column_num));
         }
 
-        System.out.println(array[1].getIndex() + " " + array[1].getStringValue());
-        System.out.println(array[3].getIndex() + " " + array[3].getStringValue());
-        System.out.println(array.toString());
         // sorts the array
-        array = sortData(array, getRowCount());
-        System.out.println(array[1].getIndex() + " " + array[1].getStringValue());
-        System.out.println(array[3].getIndex() + " " + array[3].getStringValue());
-        System.out.println(array.toString());
+        var new_array = Util.sortData(array, getRowCount());
+
+        for (int i = 0; i < getRowCount(); i++) {
+            array[i].set(new_array[i]);
+        }
 
         ArrayList<ArrayList<String>> newList = new ArrayList<>();
         int old_row_position;
@@ -160,18 +175,16 @@ public class Data {
         dataPoints = newList;
     }
 
-    private IndexValueData[] sortData(IndexValueData[] data, int length) {
-        // IndexValueData[] new_data = new IndexValueData[length];
-        IndexValueData temp = new IndexValueData(0, "");
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < (length - i - 1); j++) {
-                if (data[j].compareTo(data[j + 1]) >= 0) {
-                    temp.set(data[j + 1]);
-                    data[j + 1].set(data[j]);
-                    data[j].set(temp);
-                }
+    public ArrayList<String> getColumnOptions(int column_num) {
+        ArrayList<String> options = new ArrayList<>();
+        String item;
+        for (ArrayList<String> row : dataPoints) {
+            item = row.get(column_num);
+            if (!options.contains(item)) {
+                options.add(item);
             }
         }
-        return data;
+
+        return options;
     }
 }
