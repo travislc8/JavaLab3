@@ -5,14 +5,18 @@ import src.ViewModel.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class DisplayPanel extends JPanel {
     FilterPanel filterPanel;
     TablePanel tablePanel;
-    DetailsPanel detailsPanel;
     ChartPanel chartPanel;
     StatsPanel statsPanel;
     Dimension windowDimension;
@@ -31,12 +35,8 @@ public class DisplayPanel extends JPanel {
         left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.PAGE_AXIS));
 
         // table panel
-        tablePanel = new TablePanel(getDimension(.5, .4));
+        tablePanel = new TablePanel(getDimension(.5, .9));
         left_panel.add(tablePanel);
-
-        // chart panel
-        chartPanel = new ChartPanel(getDimension(.5, .5));
-        left_panel.add(chartPanel);
 
         this.add(left_panel, BorderLayout.LINE_START);
 
@@ -44,13 +44,13 @@ public class DisplayPanel extends JPanel {
         JPanel right_panel = new JPanel();
         right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.PAGE_AXIS));
 
-        // detail panel
-        detailsPanel = new DetailsPanel(getDimension(.5, .4));
-        right_panel.add(detailsPanel);
-
         // stat panel
-        statsPanel = new StatsPanel(getDimension(.5, .5));
+        statsPanel = new StatsPanel(getDimension(.5, .4));
         right_panel.add(statsPanel);
+
+        // chart panel
+        chartPanel = new ChartPanel(getDimension(.5, .6));
+        right_panel.add(chartPanel);
 
         this.add(right_panel, BorderLayout.LINE_END);
     }
@@ -68,4 +68,5 @@ public class DisplayPanel extends JPanel {
         int height = (int) (windowDimension.height * percent_height);
         return new Dimension(width, height);
     }
+
 }

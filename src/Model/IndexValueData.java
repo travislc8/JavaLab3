@@ -1,6 +1,8 @@
 package src.Model;
 
-public class IndexValueData implements Comparable<IndexValueData> {
+import java.util.Comparator;
+
+public class IndexValueData implements Comparable<IndexValueData>, Comparator<IndexValueData> {
     private int index;
     private String stringValue;
     private int numValue;
@@ -72,6 +74,15 @@ public class IndexValueData implements Comparable<IndexValueData> {
             return this.numValue - other.getNumValue();
         } else {
             return this.stringValue.compareToIgnoreCase(other.getStringValue());
+        }
+    }
+
+    @Override
+    public int compare(IndexValueData o1, IndexValueData o2) {
+        if (isNumValue) {
+            return o1.numValue - o2.getNumValue();
+        } else {
+            return o1.stringValue.compareToIgnoreCase(o2.getStringValue());
         }
     }
 }

@@ -227,4 +227,8 @@ public class Data {
     public int getColumnWidth(int column_num) {
         return columnWidth.get(column_num);
     }
+
+    public ArrayList<String> getColumnNames() {
+        return columnNames;
+    }
 }
