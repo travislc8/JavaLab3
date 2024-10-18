@@ -1,3 +1,5 @@
+package src.Model;
+
 import java.util.Arrays;
 
 public class Util {
@@ -22,14 +24,17 @@ public class Util {
     }
 
     public static IndexValueData[] sortData(IndexValueData[] data, int length) {
-        for (int i = 2; i <= length; i *= 2) {
+        for (int i = 2; i <= length * 2; i *= 2) {
+
             int k = 0;
             do {
                 int start = k, end = k + i;
                 if (end > length) {
                     end = length;
                 }
-                int mid = start + ((end - start) / 2);
+                int mid = (i / 2) + k;
+                if (mid > length)
+                    break;
                 int left_length = mid - start;
                 int right_length = end - mid;
                 var left_array = Arrays.copyOfRange(data, start, mid);
@@ -49,6 +54,7 @@ public class Util {
 
     public static IndexValueData[] merge(int left_length, IndexValueData[] left,
             int right_length, IndexValueData[] right) {
+        int count = 0;
         int length = left_length + right_length;
         var new_array = new IndexValueData[length];
         for (int i = 0; i < length; i++) {

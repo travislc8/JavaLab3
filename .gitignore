@@ -1,1 +1,4 @@
-run.ps1
+test.ps1
+gui.ps1
+.idea/
+out/

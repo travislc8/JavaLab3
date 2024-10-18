@@ -1,3 +1,5 @@
+package src.Model;
+
 public class IndexValueData implements Comparable<IndexValueData> {
     private int index;
     private String stringValue;
@@ -15,12 +17,14 @@ public class IndexValueData implements Comparable<IndexValueData> {
         this.index = index;
         this.stringValue = value;
         this.numValue = 0;
+        isNumValue = false;
     }
 
     public IndexValueData(int index, int value) {
         this.index = index;
         this.stringValue = "";
         this.numValue = value;
+        isNumValue = true;
     }
 
     public int getIndex() {
@@ -51,16 +55,21 @@ public class IndexValueData implements Comparable<IndexValueData> {
         this.numValue = value;
     }
 
+    public boolean getIsNum() {
+        return isNumValue;
+    }
+
     public void set(IndexValueData other) {
-        this.index = other.index;
-        this.numValue = other.numValue;
-        this.stringValue = other.stringValue;
+        this.index = other.getIndex();
+        this.numValue = other.getNumValue();
+        this.stringValue = other.getStringValue();
+        this.isNumValue = other.getIsNum();
     }
 
     @Override
     public int compareTo(IndexValueData other) {
         if (isNumValue) {
-            return this.numValue - other.numValue;
+            return this.numValue - other.getNumValue();
         } else {
             return this.stringValue.compareToIgnoreCase(other.getStringValue());
         }

@@ -1,3 +1,5 @@
+package src.Model;
+
 import java.util.ArrayList;
 
 /**
@@ -38,6 +40,7 @@ public class Data {
 
         for (int i = 0; i < row_string.length(); i += 1) {
             letter = row_string.charAt(i);
+            // case column has a , so is wrapped in ""
             if (letter == '"') {
                 i += 1;
                 letter = row_string.charAt(i);
@@ -48,7 +51,9 @@ public class Data {
                     i += 1;
                     letter = row_string.charAt(i);
                 }
-            } else if (letter != ',') {
+            }
+            // adds letter to word if not a ,
+            else if (letter != ',') {
                 word += letter;
             } else {
                 // adds the word and updates the column
@@ -148,20 +153,39 @@ public class Data {
 
     public void sortByColumn(int column_num) {
         IndexValueData[] array = new IndexValueData[getRowCount()];
-        // makes a sortable array of the column that will be sorted
-        for (int i = 0; i < getRowCount(); i++) {
-            array[i] = new IndexValueData(i, dataPoints.get(i).get(column_num));
+        // try to parse into int values and sort
+        // if fails to parse all of the values, sort as string
+        try {
+            int num;
+            String value;
+            // makes a sortable array of the column that will be sorted
+            // is int values
+            for (int i = 0; i < getRowCount(); i++) {
+                value = dataPoints.get(i).get(column_num);
+                // check if value is blank and make value 0
+                if (value.equals("")) {
+                    num = 0;
+                } else {
+                    num = Integer.parseInt(value);
+                }
+                // creates the object
+                array[i] = new IndexValueData(i, num);
+            }
+        } catch (Exception e) {
+            // makes a sortable array of the column that will be sorted
+            // is string values
+            for (int i = 0; i < getRowCount(); i++) {
+                array[i] = new IndexValueData(i, dataPoints.get(i).get(column_num));
+            }
         }
 
         // sorts the array
-        var new_array = Util.sortData(array, getRowCount());
+        array = Util.sortData(array, getRowCount());
 
-        for (int i = 0; i < getRowCount(); i++) {
-            array[i].set(new_array[i]);
-        }
-
+        // new array list is created to put the sorted values in
         ArrayList<ArrayList<String>> newList = new ArrayList<>();
         int old_row_position;
+
         // adds the proper row from the old array into the new array
         for (int i = 0; i < getRowCount(); i++) {
             ArrayList<String> row = new ArrayList<>();
@@ -186,5 +210,21 @@ public class Data {
         }
 
         return options;
+    }
+
+    public Class<?> getColumnClass(int column_num) {
+        return dataPoints.get(1).get(column_num).getClass();
+    }
+
+    public String getColumnName(int column_num) {
+        return columnNames.get(column_num);
+    }
+
+    public String getCell(int row_num, int column_num) {
+        return dataPoints.get(row_num).get(column_num);
+    }
+
+    public int getColumnWidth(int column_num) {
+        return columnWidth.get(column_num);
     }
 }
