@@ -14,10 +14,11 @@ public class TablePanel extends JPanel {
     private DataTableModel data;
     JTable table;
     JScrollPane scrollPane;
-    private int width = 900;
-    private int height = 900;
+    private Dimension panelDimension;
 
-    public TablePanel() {
+    public TablePanel(Dimension dimension) {
+        panelDimension = dimension;
+        setPreferredSize(panelDimension);
         // reads the data from the file
         DataReader reader = new DataReader();
         reader.init();
@@ -25,7 +26,6 @@ public class TablePanel extends JPanel {
         // initializes the data
         data = new DataTableModel(reader.getData());
         data.sortByColumn(7);
-        this.setBackground(Color.red);
 
         // initializes the tabel
         table = new JTable();
@@ -34,10 +34,10 @@ public class TablePanel extends JPanel {
         setTableLayout();
 
         scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(width, height));
-        this.add(scrollPane);
+        scrollPane.setPreferredSize(panelDimension);
 
         this.setBackground(Color.red);
+        this.add(scrollPane);
     }
 
     private void setTableLayout() {

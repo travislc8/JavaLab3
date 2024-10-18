@@ -4,34 +4,33 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+
 import src.View.*;
 import src.Model.*;
 import src.ViewModel.*;
 
 public class DataVisuallizationTool {
+
     public static void main(String[] args) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenSize.height = screenSize.height - 45;
         JFrame frame = new JFrame("Data Visualiztion Tool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setPreferredSize(new Dimension(1000, 1000));
+        frame.setPreferredSize(screenSize);
 
-        // sets the table panel
-        TablePanel tablePanel = new TablePanel();
-        frame.add(tablePanel);
-
-        /*
-         * var data = new Object[][] {
-         * { "1", "2", "3" },
-         * { "1", "2", "3" },
-         * { "1", "2", "3" }
-         * };
-         * var names = new String[] { "a", "b", "c" };
-         * var table = new JTable(data, names);
-         * frame.add(table);
-         */
+        // sets display panel
+        DisplayPanel displayPanel = new DisplayPanel(screenSize);
+        frame.add(displayPanel);
 
         frame.pack();
         frame.setVisible(true);
+        // frame.setUndecorated(true);
+        // device.setFullScreenWindow(frame);
 
     }
 
+    static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 }
