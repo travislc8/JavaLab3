@@ -6,9 +6,11 @@ import java.util.ArrayList;
  * some explanation
  */
 public class Data {
+    private int columnCount;
     private ArrayList<ArrayList<String>> dataPoints = new ArrayList<>();
     private ArrayList<String> columnNames = new ArrayList<>();
     private ArrayList<Integer> columnWidth = new ArrayList<>();
+    private ArrayList<Class<?>> columnClass = new ArrayList<>();
 
     public Data() {
     }
@@ -20,7 +22,7 @@ public class Data {
     public void init(ArrayList<String> fileContents) {
 
         // initializes the column width array
-        setColumnWidth(fileContents.get(0));
+        setInitialColumnWidth(fileContents.get(0));
 
         // gets the coumn name data
         columnNames = getRowData(fileContents.get(0));
@@ -29,6 +31,11 @@ public class Data {
         for (int i = 1; i < fileContents.size(); i += 1) {
             dataPoints.add(getRowData(fileContents.get(i)));
         }
+
+        // initializes the column types
+        setColumnTypes();
+        // sets all "" values in number rows to 0
+        convertNumberRows();
 
     }
 
@@ -130,7 +137,7 @@ public class Data {
         System.out.println();
     }
 
-    private void setColumnWidth(String line) {
+    private void setInitialColumnWidth(String line) {
         int count = 3;
         for (int i = 0; i < line.length(); i++) {
             if (line.charAt(i) == ',')
@@ -141,6 +148,7 @@ public class Data {
         for (int i = 0; i < count; i++) {
             columnWidth.add(1);
         }
+        columnCount = count;
     }
 
     public int getRowCount() {
@@ -213,7 +221,7 @@ public class Data {
     }
 
     public Class<?> getColumnClass(int column_num) {
-        return dataPoints.get(1).get(column_num).getClass();
+        return columnClass.get(column_num);
     }
 
     public String getColumnName(int column_num) {
@@ -231,4 +239,61 @@ public class Data {
     public ArrayList<String> getColumnNames() {
         return columnNames;
     }
+
+    private void updataColumnClass(int column_num, String item) {
+        if (columnClass.get(column_num) == String.class) {
+            return;
+        }
+        try {
+            if (!item.equals("")) {
+                Double.parseDouble(item);
+                if (columnClass.get(column_num) == Integer.class) {
+                    columnClass.set(column_num, Double.class);
+                }
+            }
+        } catch (Exception e1) {
+            try {
+                if (!item.equals("")) {
+                    Integer.parseInt(item);
+                    // does noting becuase int is default
+                }
+            } catch (Exception e2) {
+                columnClass.set(column_num, String.class);
+            }
+        }
+    }
+
+    private void setColumnTypes() {
+        columnClass = new ArrayList<>();
+        for (int i = 0; i < columnCount; i++) {
+            columnClass.add(Integer.class);
+        }
+
+        for (int i = 1; i < getRowCount(); i++) {
+            for (int j = 0; j < getColumnCount(); j++) {
+                updataColumnClass(j, dataPoints.get(i).get(j));
+            }
+        }
+    }
+
+    private void convertNumberRows() {
+        for (int i = 0; i < getColumnCount(); i++) {
+
+            // if it is a string column
+            if (columnClass.get(i) == "".getClass())
+                continue;
+
+            for (int j = 0; j < getRowCount(); j++) {
+                if (dataPoints.get(i).size() > getColumnCount()) {
+                    continue;
+                }
+
+                if (dataPoints.get(j).get(i).equals("")) {
+                    dataPoints.get(j).set(i, "0");
+                }
+            }
+
+        }
+    }
+
 }

@@ -9,6 +9,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -17,15 +19,17 @@ import src.View.*;
 import src.Model.*;
 import src.ViewModel.*;
 
-public class TablePanel extends JPanel {
+public class TablePanel extends JPanel implements ActionListener {
     private DataTableModel data;
     JTable table;
     JScrollPane scrollPane;
     private Dimension panelDimension;
     int selectedItem = 0;
     DetailsPanel detailPanel;
+    StatsPanel statsPanel;
 
-    public TablePanel(Dimension dimension) {
+    public TablePanel(Dimension dimension, StatsPanel statsPanel) {
+        this.statsPanel = statsPanel;
         panelDimension = dimension;
         setPreferredSize(panelDimension);
         setBackground(Color.white);
@@ -74,6 +78,7 @@ public class TablePanel extends JPanel {
             ListSelectionModel model = (ListSelectionModel) e.getSource();
             selectedItem = e.getFirstIndex();
             updateDetailPanel();
+            statsPanel.setData(data);
         }
     }
 
@@ -102,32 +107,53 @@ public class TablePanel extends JPanel {
     }
 
     private void setTableSorter() {
-        Comparator<String> comparator = new Comparator<String>() {
+        Comparator<String> stringComparator = new Comparator<String>() {
             public int compare(String s1, String s2) {
-                try {
-                    double num1 = Double.parseDouble(s1);
-                    double num2 = Double.parseDouble(s2);
-                    double result = num1 - num2;
-                    if (result == 0) {
-                        return 0;
-                    }
-                    if (result < 1 && result > -1) {
-                        if (result > 0)
-                            return 1;
-                        else
-                            return -1;
-                    }
-
-                    return (int) result;
-                } catch (Exception e) {
-                    return s1.compareToIgnoreCase(s2);
-                }
+                return s1.compareToIgnoreCase(s2);
             }
+        };
+        Comparator<Double> doubleComparator = new Comparator<Double>() {
+            public int compare(Double d1, Double d2) {
+                double result = d1 - d2;
+                if (result == 0) {
+                    return 0;
+                }
+                if (result < 1 && result > -1) {
+                    if (result > 0)
+                        return 1;
+                    else
+                        return -1;
+                }
+
+                return (int) result;
+            }
+
+        };
+        Comparator<Integer> intComparator = new Comparator<Integer>() {
+            public int compare(Integer i1, Integer i2) {
+                return i1 - i2;
+            }
+
         };
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
         for (int i = 0; i < data.getColumnCount(); i++) {
-            sorter.setComparator(i, comparator);
+            if (data.getColumnClass(i) == String.class)
+                sorter.setComparator(i, stringComparator);
+            else if (data.getColumnClass(i) == Double.class)
+                sorter.setComparator(i, doubleComparator);
+            else
+                sorter.setComparator(i, intComparator);
         }
         table.setRowSorter(sorter);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("In table panel action performed");
+    }
+
+    public DataTableModel getDataModel() {
+        return data;
+    }
+
 }

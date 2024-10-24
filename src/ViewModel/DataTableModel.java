@@ -47,7 +47,14 @@ public class DataTableModel extends Data implements TableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return getRow(rowIndex).get(columnIndex);
+        String value = getRow(rowIndex).get(columnIndex);
+        if (getColumnClass(columnIndex) == Integer.class) {
+            return Integer.parseInt(value);
+        } else if (getColumnClass(columnIndex) == Double.class) {
+            return Double.parseDouble(value);
+        } else {
+            return value;
+        }
     }
 
     @Override

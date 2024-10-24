@@ -5,16 +5,17 @@ import src.ViewModel.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class DisplayPanel extends JPanel {
+public class DisplayPanel extends JPanel implements ActionListener {
     FilterPanel filterPanel;
     TablePanel tablePanel;
     ChartPanel chartPanel;
@@ -30,16 +31,6 @@ public class DisplayPanel extends JPanel {
         filterPanel = new FilterPanel(getDimension(1, .05));
         this.add(filterPanel, BorderLayout.PAGE_START);
 
-        // left panel
-        JPanel left_panel = new JPanel();
-        left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.PAGE_AXIS));
-
-        // table panel
-        tablePanel = new TablePanel(getDimension(.5, .9));
-        left_panel.add(tablePanel);
-
-        this.add(left_panel, BorderLayout.LINE_START);
-
         // right panel
         JPanel right_panel = new JPanel();
         right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.PAGE_AXIS));
@@ -53,6 +44,17 @@ public class DisplayPanel extends JPanel {
         right_panel.add(chartPanel);
 
         this.add(right_panel, BorderLayout.LINE_END);
+
+        // left panel
+        JPanel left_panel = new JPanel();
+        left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.PAGE_AXIS));
+
+        // table panel
+        tablePanel = new TablePanel(getDimension(.5, .9), statsPanel);
+        left_panel.add(tablePanel);
+
+        this.add(left_panel, BorderLayout.LINE_START);
+
     }
 
     private int getWindowWidth() {
@@ -67,6 +69,11 @@ public class DisplayPanel extends JPanel {
         int width = (int) (windowDimension.width * percent_width);
         int height = (int) (windowDimension.height * percent_height);
         return new Dimension(width, height);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("In display panel action performed");
     }
 
 }
