@@ -12,6 +12,30 @@ public class Data {
     private ArrayList<Integer> columnWidth = new ArrayList<>();
     private ArrayList<Class<?>> columnClass = new ArrayList<>();
 
+    public void setColumnCount(int columnCount) {
+        this.columnCount = columnCount;
+    }
+
+    public void setColumnNames(ArrayList<String> columnNames) {
+        this.columnNames = columnNames;
+    }
+
+    public ArrayList<Integer> getColumnWidth() {
+        return columnWidth;
+    }
+
+    public void setColumnWidth(ArrayList<Integer> columnWidth) {
+        this.columnWidth = columnWidth;
+    }
+
+    public ArrayList<Class<?>> getColumnClass() {
+        return columnClass;
+    }
+
+    public void setColumnClass(ArrayList<Class<?>> columnClass) {
+        this.columnClass = columnClass;
+    }
+
     public Data() {
     }
 
@@ -25,11 +49,11 @@ public class Data {
         setInitialColumnWidth(fileContents.get(0));
 
         // gets the coumn name data
-        columnNames = getRowData(fileContents.get(0));
+        columnNames = extractRowData(fileContents.get(0));
 
         // add the row data
         for (int i = 1; i < fileContents.size(); i += 1) {
-            dataPoints.add(getRowData(fileContents.get(i)));
+            dataPoints.add(extractRowData(fileContents.get(i)));
         }
 
         // initializes the column types
@@ -39,7 +63,11 @@ public class Data {
 
     }
 
-    private ArrayList<String> getRowData(String row_string) {
+    protected void setDataPoints(ArrayList<ArrayList<String>> dataPoints) {
+        this.dataPoints = dataPoints;
+    }
+
+    private ArrayList<String> extractRowData(String row_string) {
         String word = "";
         char letter;
         ArrayList<String> row_data = new ArrayList<>();
@@ -103,7 +131,7 @@ public class Data {
 
     public ArrayList<String> getRow(int index) {
         // returns index + 1 to account for header
-        return dataPoints.get(index + 1);
+        return dataPoints.get(index);
     }
 
     public void printHeader() {
@@ -152,7 +180,7 @@ public class Data {
     }
 
     public int getRowCount() {
-        return dataPoints.size() - 1;
+        return dataPoints.size();
     }
 
     public int getColumnCount() {
@@ -269,7 +297,7 @@ public class Data {
             columnClass.add(Integer.class);
         }
 
-        for (int i = 1; i < getRowCount(); i++) {
+        for (int i = 0; i < getRowCount(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
                 updataColumnClass(j, dataPoints.get(i).get(j));
             }
@@ -293,6 +321,63 @@ public class Data {
                 }
             }
 
+        }
+    }
+
+    public ArrayList<ArrayList<String>> getDataPoints() {
+        ArrayList<ArrayList<String>> new_data = new ArrayList<>();
+        for (ArrayList<String> old_row : dataPoints) {
+            var new_row = new ArrayList<String>();
+            for (String word : old_row) {
+                new_row.add(word);
+            }
+            new_data.add(new_row);
+        }
+
+        return new_data;
+    }
+
+    public void removeAllButCatagory(int column_num, String catagory) {
+        for (int i = 0; i < getRowCount();) {
+            String value = dataPoints.get(i).get(column_num);
+            if (!value.equals(catagory)) {
+                dataPoints.remove(i);
+            } else {
+                i += 1;
+            }
+        }
+
+        if (dataPoints.size() == 0) {
+            var empty_row = new ArrayList<String>();
+            for (int i = 0; i < getColumnCount(); i++) {
+                if (getColumnClass(i) != String.class)
+                    empty_row.add("0");
+                else
+                    empty_row.add("");
+            }
+            dataPoints.add(empty_row);
+        }
+    }
+
+    public void removeCatagory(int column_num, String catagory) {
+        for (int i = 0; i < getRowCount();) {
+            String value = dataPoints.get(i).get(column_num);
+            if (value.equals(catagory)) {
+                dataPoints.remove(i);
+            } else {
+                i += 1;
+            }
+        }
+
+        if (dataPoints.size() == 0) {
+            var empty_row = new ArrayList<String>();
+            for (int i = 0; i < getColumnCount(); i++) {
+                if (getColumnClass(i) != String.class)
+                    empty_row.add("0");
+                else
+                    empty_row.add("");
+            }
+            dataPoints.add(empty_row);
         }
     }
 

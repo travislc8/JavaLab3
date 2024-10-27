@@ -7,12 +7,14 @@ import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 
 import src.View.*;
 import src.Model.*;
 import src.ViewModel.*;
 
 public class DataVisuallizationTool {
+    static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
     public static void main(String[] args) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -22,7 +24,7 @@ public class DataVisuallizationTool {
         frame.setPreferredSize(screenSize);
 
         // sets display panel
-        DisplayPanel displayPanel = new DisplayPanel(screenSize);
+        DisplayPanel displayPanel = new DisplayPanel(screenSize, getData());
         frame.add(displayPanel);
 
         frame.pack();
@@ -32,5 +34,9 @@ public class DataVisuallizationTool {
 
     }
 
-    static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+    private static ArrayList<String> getData() {
+        DataReader reader = new DataReader();
+        reader.init();
+        return reader.getData();
+    }
 }

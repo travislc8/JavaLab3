@@ -25,6 +25,14 @@ public class DataTableModel extends Data implements TableModel {
         init(fileContents);
     }
 
+    public DataTableModel(Data data) {
+        this.setDataPoints(data.getDataPoints());
+        this.setColumnCount(data.getColumnCount());
+        this.setColumnNames(data.getColumnNames());
+        this.setColumnWidth(data.getColumnWidth());
+        this.setColumnClass(data.getColumnClass());
+    }
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return super.getColumnClass(columnIndex);

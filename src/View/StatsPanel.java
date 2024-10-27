@@ -31,8 +31,11 @@ public class StatsPanel extends JPanel implements ActionListener {
     }
 
     public void setData(DataTableModel data) {
+        this.removeAll();
         this.data = data;
         updateStats();
+        this.revalidate();
+        this.removeAll();
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -20,15 +21,16 @@ public class DisplayPanel extends JPanel implements ActionListener {
     TablePanel tablePanel;
     ChartPanel chartPanel;
     StatsPanel statsPanel;
+    DetailsPanel detailsPanel;
     Dimension windowDimension;
 
-    public DisplayPanel(Dimension screen_size) {
+    public DisplayPanel(Dimension screen_size, ArrayList<String> data) {
         windowDimension = screen_size;
 
         setLayout(new BorderLayout());
 
         // filter panel
-        filterPanel = new FilterPanel(getDimension(1, .05));
+        filterPanel = new FilterPanel(getDimension(1, .05), data);
         this.add(filterPanel, BorderLayout.PAGE_START);
 
         // right panel
@@ -50,10 +52,19 @@ public class DisplayPanel extends JPanel implements ActionListener {
         left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.PAGE_AXIS));
 
         // table panel
-        tablePanel = new TablePanel(getDimension(.5, .9), statsPanel);
+        tablePanel = new TablePanel(getDimension(.5, .6),
+                filterPanel.getFilteredData());
         left_panel.add(tablePanel);
 
+        // detail panel
+        detailsPanel = new DetailsPanel(getDimension(.5, .4));
+        left_panel.add(detailsPanel);
+
         this.add(left_panel, BorderLayout.LINE_START);
+
+        // adds the dependencies between the panels
+        tablePanel.addDependentPanels(statsPanel, chartPanel, detailsPanel);
+        filterPanel.setTablePanel(tablePanel);
 
     }
 

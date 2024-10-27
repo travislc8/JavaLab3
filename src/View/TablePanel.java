@@ -20,26 +20,23 @@ import src.Model.*;
 import src.ViewModel.*;
 
 public class TablePanel extends JPanel implements ActionListener {
-    private DataTableModel data;
+    private DataTableModel dataTableModel;
     JTable table;
     JScrollPane scrollPane;
     private Dimension panelDimension;
     int selectedItem = 0;
-    DetailsPanel detailPanel;
+    DetailsPanel detailsPanel;
     StatsPanel statsPanel;
+    ChartPanel chartPanel;
 
-    public TablePanel(Dimension dimension, StatsPanel statsPanel) {
-        this.statsPanel = statsPanel;
+    public TablePanel(Dimension dimension, DataTableModel data) {
         panelDimension = dimension;
         setPreferredSize(panelDimension);
         setBackground(Color.white);
         this.setLayout(new BorderLayout());
-        // reads the data from the file
-        DataReader reader = new DataReader();
-        reader.init();
 
         // initializes the data
-        data = new DataTableModel(reader.getData());
+        this.dataTableModel = new DataTableModel(data);
 
         // initializes the tabel
         table = new JTable();
@@ -50,15 +47,24 @@ public class TablePanel extends JPanel implements ActionListener {
         setSelectionModel();
 
         scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(panelDimension.width,
-                (int) (panelDimension.height * .6)));
-
-        detailPanel = new DetailsPanel(new Dimension(panelDimension.width,
-                (int) (panelDimension.height * .4)));
-        updateDetailPanel();
+        scrollPane.setPreferredSize(panelDimension);
 
         this.add(scrollPane, BorderLayout.PAGE_START);
-        this.add(detailPanel, BorderLayout.PAGE_END);
+    }
+
+    private void setTable() {
+        // initializes the tabel
+        table = new JTable();
+        table.setModel(dataTableModel);
+
+        setTableSorter();
+        setTableLayout();
+        setSelectionModel();
+
+        scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(panelDimension);
+
+        this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
     private void setTableLayout() {
@@ -67,8 +73,8 @@ public class TablePanel extends JPanel implements ActionListener {
         // sets the column width
         TableColumnModel column = table.getColumnModel();
 
-        for (int i = 0; i < data.getColumnCount(); i++) {
-            column.getColumn(i).setPreferredWidth(data.getColumnWidth(i) * 3);
+        for (int i = 0; i < dataTableModel.getColumnCount(); i++) {
+            column.getColumn(i).setPreferredWidth(dataTableModel.getColumnWidth(i) * 3);
         }
 
     }
@@ -78,7 +84,8 @@ public class TablePanel extends JPanel implements ActionListener {
             ListSelectionModel model = (ListSelectionModel) e.getSource();
             selectedItem = e.getFirstIndex();
             updateDetailPanel();
-            statsPanel.setData(data);
+            statsPanel.setData(dataTableModel);
+            chartPanel.setData(dataTableModel);
         }
     }
 
@@ -92,9 +99,9 @@ public class TablePanel extends JPanel implements ActionListener {
         int index = table.convertRowIndexToModel(selectedItem);
         var columnNames = new ArrayList<String>();
         var row = new ArrayList<String>();
-        for (int i = 0; i < data.getColumnCount(); i++) {
-            columnNames.add(data.getColumnName(i));
-            row.add(data.getValueAt(index, i).toString());
+        for (int i = 0; i < dataTableModel.getColumnCount(); i++) {
+            columnNames.add(dataTableModel.getColumnName(i));
+            row.add(dataTableModel.getValueAt(index, i).toString());
         }
         RowData rowData = new RowData(columnNames, row, row.size());
 
@@ -103,7 +110,7 @@ public class TablePanel extends JPanel implements ActionListener {
 
     private void updateDetailPanel() {
         RowData selectedData = getSelectedItem();
-        detailPanel.setItem(selectedData);
+        detailsPanel.setItem(selectedData);
     }
 
     private void setTableSorter() {
@@ -136,15 +143,18 @@ public class TablePanel extends JPanel implements ActionListener {
 
         };
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
-        for (int i = 0; i < data.getColumnCount(); i++) {
-            if (data.getColumnClass(i) == String.class)
+        for (int i = 0; i < dataTableModel.getColumnCount(); i++) {
+            if (dataTableModel.getColumnClass(i) == String.class)
                 sorter.setComparator(i, stringComparator);
-            else if (data.getColumnClass(i) == Double.class)
+            else if (dataTableModel.getColumnClass(i) == Double.class)
                 sorter.setComparator(i, doubleComparator);
             else
                 sorter.setComparator(i, intComparator);
         }
         table.setRowSorter(sorter);
+    }
+
+    private void setTableFilters() {
     }
 
     @Override
@@ -153,7 +163,26 @@ public class TablePanel extends JPanel implements ActionListener {
     }
 
     public DataTableModel getDataModel() {
-        return data;
+        return dataTableModel;
+    }
+
+    public void addDependentPanels(StatsPanel statsPanel, ChartPanel chartPanel, DetailsPanel detailsPanel) {
+        this.statsPanel = statsPanel;
+        this.chartPanel = chartPanel;
+        this.detailsPanel = detailsPanel;
+        chartPanel.setData(getDataModel());
+        updateDetailPanel();
+        statsPanel.setData(getDataModel());
+    }
+
+    public void setData(DataTableModel data) {
+        this.removeAll();
+        this.dataTableModel = new DataTableModel(data);
+        updateDetailPanel();
+        statsPanel.setData(dataTableModel);
+        chartPanel.setData(dataTableModel);
+        setTable();
+        this.repaint();
     }
 
 }
