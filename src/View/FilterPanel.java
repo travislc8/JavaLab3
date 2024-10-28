@@ -1,9 +1,12 @@
 package src.View;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
@@ -27,7 +30,11 @@ public class FilterPanel extends JPanel {
     public FilterPanel(Dimension dimension, ArrayList<String> data) {
         panelDimension = dimension;
         setPreferredSize(panelDimension);
-        this.setBackground(Color.gray);
+        this.setBackground(Color.lightGray);
+        this.setLayout(new GridLayout(2, 1));
+        this.setBackground(Color.lightGray);
+
+        setTitle();
 
         allData = new DataTableModel(data);
         // no filters are applied so the filtered equals unfiltered
@@ -38,6 +45,15 @@ public class FilterPanel extends JPanel {
 
     public void setTablePanel(TablePanel tablePanel) {
         this.tablePanel = tablePanel;
+    }
+
+    private void setTitle() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.lightGray);
+        JLabel label = new JLabel("Data Visualization Tool");
+        label.setFont(new Font(null, Font.PLAIN, 22));
+        panel.add(label);
+        this.add(panel, BorderLayout.PAGE_START);
     }
 
     private void setFilterPanel() {
@@ -53,6 +69,9 @@ public class FilterPanel extends JPanel {
         // iterates through the columns in the table
         // if the column has more than one option
         // adds the filters to the filter array
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new GridLayout(1, 0));
+        filterPanel.setBackground(Color.lightGray);
         for (int i = 0; i < filteredData.getColumnCount(); i++) {
             // does not add filters if it is numeric data
             if (filteredData.getColumnClass(i) == Integer.class ||
@@ -81,6 +100,7 @@ public class FilterPanel extends JPanel {
             // makes a drop down
             if (options.size() > 5) {
                 JPanel panel = new JPanel();
+                panel.setBackground(Color.lightGray);
                 panel.add(new JLabel(allData.getColumnName(i)));
 
                 options.add(0, noSelectionString);
@@ -94,24 +114,27 @@ public class FilterPanel extends JPanel {
                 });
 
                 panel.add(dropDown);
-                this.add(panel);
+                filterPanel.add(panel);
 
             } else {
 
                 JPanel panel = new JPanel();
+                panel.setBackground(Color.lightGray);
                 panel.add(new JLabel(allData.getColumnName(i)));
 
                 for (String option : options) {
                     FilterOption box = new FilterOption(i, option);
+                    box.setBackground(Color.lightGray);
                     filterCheckBoxes.add(box);
                     box.addItemListener(e -> {
                         filterData();
                     });
                     panel.add(box);
                 }
-                this.add(panel);
+                filterPanel.add(panel);
             }
         }
+        this.add(filterPanel, BorderLayout.CENTER);
 
     }
 
@@ -163,6 +186,6 @@ public class FilterPanel extends JPanel {
     }
 
     private void updateDependents() {
-        tablePanel.setData(filteredData);
+        tablePanel.updateData(filteredData);
     }
 }

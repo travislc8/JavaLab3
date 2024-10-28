@@ -84,8 +84,8 @@ public class TablePanel extends JPanel implements ActionListener {
             ListSelectionModel model = (ListSelectionModel) e.getSource();
             selectedItem = e.getFirstIndex();
             updateDetailPanel();
-            statsPanel.setData(dataTableModel);
-            chartPanel.setData(dataTableModel);
+            statsPanel.updateData(dataTableModel);
+            chartPanel.updatDataset(dataTableModel);
         }
     }
 
@@ -170,17 +170,27 @@ public class TablePanel extends JPanel implements ActionListener {
         this.statsPanel = statsPanel;
         this.chartPanel = chartPanel;
         this.detailsPanel = detailsPanel;
-        chartPanel.setData(getDataModel());
+        this.chartPanel.setData(getDataModel());
         updateDetailPanel();
-        statsPanel.setData(getDataModel());
+        this.statsPanel.updateData(getDataModel());
     }
 
     public void setData(DataTableModel data) {
         this.removeAll();
         this.dataTableModel = new DataTableModel(data);
         updateDetailPanel();
-        statsPanel.setData(dataTableModel);
+        statsPanel.updateData(dataTableModel);
         chartPanel.setData(dataTableModel);
+        setTable();
+        this.repaint();
+    }
+
+    public void updateData(DataTableModel data) {
+        this.removeAll();
+        this.dataTableModel = new DataTableModel(data);
+        updateDetailPanel();
+        statsPanel.updateData(dataTableModel);
+        chartPanel.updatDataset(dataTableModel);
         setTable();
         this.repaint();
     }

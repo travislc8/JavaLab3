@@ -30,7 +30,7 @@ public class DisplayPanel extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         // filter panel
-        filterPanel = new FilterPanel(getDimension(1, .05), data);
+        filterPanel = new FilterPanel(getDimension(1, .08), data);
         this.add(filterPanel, BorderLayout.PAGE_START);
 
         // right panel
@@ -38,11 +38,11 @@ public class DisplayPanel extends JPanel implements ActionListener {
         right_panel.setLayout(new BoxLayout(right_panel, BoxLayout.PAGE_AXIS));
 
         // stat panel
-        statsPanel = new StatsPanel(getDimension(.5, .4));
+        statsPanel = new StatsPanel(getDimension(.5, .25));
         right_panel.add(statsPanel);
 
         // chart panel
-        chartPanel = new ChartPanel(getDimension(.5, .6));
+        chartPanel = new ChartPanel(getDimension(.5, .5));
         right_panel.add(chartPanel);
 
         this.add(right_panel, BorderLayout.LINE_END);
@@ -52,12 +52,12 @@ public class DisplayPanel extends JPanel implements ActionListener {
         left_panel.setLayout(new BoxLayout(left_panel, BoxLayout.PAGE_AXIS));
 
         // table panel
-        tablePanel = new TablePanel(getDimension(.5, .6),
+        tablePanel = new TablePanel(getDimension(.5, .5),
                 filterPanel.getFilteredData());
         left_panel.add(tablePanel);
 
         // detail panel
-        detailsPanel = new DetailsPanel(getDimension(.5, .4));
+        detailsPanel = new DetailsPanel(getDimension(.5, .35));
         left_panel.add(detailsPanel);
 
         this.add(left_panel, BorderLayout.LINE_START);

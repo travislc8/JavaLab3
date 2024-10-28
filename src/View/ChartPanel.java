@@ -2,6 +2,7 @@ package src.View;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.jfree.chart.*;
@@ -11,6 +12,7 @@ import src.Model.*;
 import src.ViewModel.*;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ChartPanel extends JPanel {
@@ -19,6 +21,9 @@ public class ChartPanel extends JPanel {
     int xAxisIndex;
     int yAxisIndex;
     DefaultCategoryDataset dataset;
+    JComboBox<String> xDropDown;
+    JComboBox<String> yDropDown;
+    JPanel controlPanel;
 
     public ChartPanel(Dimension dimension) {
         this.panelDimension = dimension;
@@ -31,12 +36,50 @@ public class ChartPanel extends JPanel {
     }
 
     public void setData(DataTableModel data) {
-        this.removeAll();
         this.dataTableModel = data;
-        updateDataset();
+        if (data.getColumnCount() < 9) {
+            xAxisIndex = 2;
+            yAxisIndex = 1;
+        }
+
         setPanel();
+    }
+
+    private void setPanel() {
+
+        updateDataset();
+        setControlPanel();
+        updateChart();
+    }
+
+    private void updatePanel() {
+        this.removeAll();
+        this.add(controlPanel);
+        updateChart();
         this.revalidate();
         this.repaint();
+    }
+
+    private void updateChart() {
+        // chart setup
+        JFreeChart chart = ChartFactory.createBarChart("Data Chart",
+                dataTableModel.getColumnName(xAxisIndex),
+                dataTableModel.getColumnName(yAxisIndex),
+                dataset,
+                PlotOrientation.VERTICAL,
+                false,
+                false,
+                false);
+
+        org.jfree.chart.ChartPanel chartPanel = new org.jfree.chart.ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(panelDimension.width, panelDimension.height));
+        this.add(chartPanel);
+    }
+
+    public void updatDataset(DataTableModel data) {
+        this.dataTableModel = data;
+        updateDataset();
+        updatePanel();
     }
 
     private void updateDataset() {
@@ -74,28 +117,61 @@ public class ChartPanel extends JPanel {
         }
     }
 
-    private void setPanel() {
+    private void setControlPanel() {
         // drop down for options
-        JPanel controlPanel = new JPanel();
+        controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(panelDimension.width, 50));
 
-        // JComboBox<String> xDropDown = new JComboBox<String>(x_axis_options);
+        // set the x-axis options
+        var column_names = dataTableModel.getColumnNames();
+        var string_column_names = new ArrayList<String>();
+        var numeric_column_names = new ArrayList<String>();
 
+        string_column_names.add("Select an Option");
+        numeric_column_names.add("Select an Option");
+
+        for (int i = 0; i < column_names.size(); i++) {
+            // seperates the columns based on string and numeric types
+            if (dataTableModel.getColumnClass(i) == String.class) {
+                string_column_names.add(column_names.get(i));
+            } else {
+                numeric_column_names.add(column_names.get(i));
+            }
+        }
+
+        // x axis drop down
+        String[] x_axis_options = new String[string_column_names.size()];
+        x_axis_options = string_column_names.toArray(x_axis_options);
+        xDropDown = new JComboBox<String>(x_axis_options);
+        xDropDown.addItemListener(l -> {
+            setAxisCatagory();
+        });
+
+        // y axis drop down
+        String[] y_axis_options = new String[numeric_column_names.size()];
+        y_axis_options = numeric_column_names.toArray(y_axis_options);
+        yDropDown = new JComboBox<String>(y_axis_options);
+        yDropDown.addItemListener(l -> {
+            setAxisCatagory();
+        });
+
+        controlPanel.add(new JLabel("X-Axis Catagory"));
+        controlPanel.add(yDropDown);
+        controlPanel.add(new JLabel("Y-Axis Catagory"));
+        controlPanel.add(xDropDown);
         this.add(controlPanel);
-
-        // chart setup
-        JFreeChart chart = ChartFactory.createBarChart("Chart",
-                dataTableModel.getColumnName(xAxisIndex),
-                dataTableModel.getColumnName(yAxisIndex),
-                dataset,
-                PlotOrientation.VERTICAL,
-                false,
-                false,
-                false);
-
-        org.jfree.chart.ChartPanel chartPanel = new org.jfree.chart.ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(panelDimension.width, panelDimension.height - 100));
-        this.add(chartPanel);
     }
 
+    private void setAxisCatagory() {
+        var columnNames = dataTableModel.getColumnNames();
+        for (int i = 0; i < columnNames.size(); i++) {
+            if (columnNames.get(i).equals(xDropDown.getSelectedItem())) {
+                xAxisIndex = i;
+            } else if (columnNames.get(i).equals(yDropDown.getSelectedItem())) {
+                yAxisIndex = i;
+            }
+        }
+        updateDataset();
+        updatePanel();
+    }
 }
