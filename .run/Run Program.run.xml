@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Program" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="src.DataVisuallizationTool" />
+    <module name="JavaLabThree" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
