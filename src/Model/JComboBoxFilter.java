@@ -2,6 +2,10 @@ package src.Model;
 
 import javax.swing.JComboBox;
 
+/**
+ * Helper class that extends JComboBox and holds the index for the column number
+ * that the drop down is used to filter
+ */
 public class JComboBoxFilter extends JComboBox<String> {
     int columnNum;
 

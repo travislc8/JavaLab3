@@ -8,17 +8,10 @@ import src.ViewModel.*;
 import src.View.*;
 import src.Model.*;
 
+/**
+ * Class to be used for a JTable, extends Data class.
+ */
 public class DataTableModel extends Data implements TableModel {
-
-    public DataTableModel() {
-        // reads the data from the file
-        DataReader reader = new DataReader();
-        reader.init();
-
-        // sets the data
-        init(reader.getData());
-
-    }
 
     public DataTableModel(ArrayList<String> fileContents) {
         // sets the data
@@ -56,11 +49,16 @@ public class DataTableModel extends Data implements TableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         String value = getRow(rowIndex).get(columnIndex);
+        // if the value is a int
         if (getColumnClass(columnIndex) == Integer.class) {
             return Integer.parseInt(value);
-        } else if (getColumnClass(columnIndex) == Double.class) {
+        }
+        // if the value is a double
+        else if (getColumnClass(columnIndex) == Double.class) {
             return Double.parseDouble(value);
-        } else {
+        }
+        // if the value is a string
+        else {
             return value;
         }
     }

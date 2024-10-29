@@ -2,6 +2,14 @@ package src.Model;
 
 import java.util.Arrays;
 
+/**
+ * Helper Util Class
+ * Note: this class is no longer used by the program as the sorting
+ * functionality was
+ * transfered to the JTable.
+ *
+ * Contains: sortData method that uses merge sort to sort the data
+ */
 public class Util {
     /**
      * Test dirver
@@ -113,21 +121,9 @@ public class Util {
         return new_array;
     }
 
-    public static IndexValueData[] sortData2(IndexValueData[] data, int length) {
-        // IndexValueData[] new_data = new IndexValueData[length];
-        IndexValueData temp = new IndexValueData(0, "");
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < (length - i - 1); j++) {
-                if (data[j].compareTo(data[j + 1]) >= 0) {
-                    temp.set(data[j + 1]);
-                    data[j + 1].set(data[j]);
-                    data[j].set(temp);
-                }
-            }
-        }
-        return data;
-    }
-
+    /**
+     * Pads the given string to make the string length eqaual to length
+     */
     public static String rightPadString(String string, int length) {
         char[] chars = new char[length];
         int index = 0;

@@ -3,7 +3,9 @@ package src.Model;
 import java.util.ArrayList;
 
 /**
- * some explanation
+ * Class that holds data that has row and column data.
+ * Allows O(1) access and modification to any data cell
+ * Stores Column headers seperate to the data
  */
 public class Data {
     private int columnCount;
@@ -43,6 +45,12 @@ public class Data {
         init(fileContents);
     }
 
+    /**
+     * Method to initialize the data from an array list of lines representing rows
+     * fileContents must be in the form of a .csv file to properly read the data
+     *
+     * @param fileContents an ArrayList<String> of lines of a .csv file
+     */
     public void init(ArrayList<String> fileContents) {
 
         // initializes the column width array
@@ -67,12 +75,18 @@ public class Data {
         this.dataPoints = dataPoints;
     }
 
+    /**
+     * combines the data into an ArrayList<String> where each String is a single
+     * row of data.
+     * Used to get the data in the form that is used to initialize the Data class
+     */
     private ArrayList<String> extractRowData(String row_string) {
         String word = "";
         char letter;
         ArrayList<String> row_data = new ArrayList<>();
         int count = 0;
 
+        // iterates over each row of data and formats the row into a single string
         for (int i = 0; i < row_string.length(); i += 1) {
             letter = row_string.charAt(i);
             // case column has a , so is wrapped in ""
@@ -103,12 +117,22 @@ public class Data {
         return row_data;
     }
 
+    /**
+     * Helper method that updates the column width variable if the given value is
+     * longer than the current longest value for that column
+     *
+     * @param word   the String that is added to the column
+     * @param column the colunn the value was added to
+     */
     private void updateColumnWidth(String word, int column) {
         if (word.length() >= columnWidth.get(column)) {
             columnWidth.set(column, word.length() + 1);
         }
     }
 
+    /**
+     * Helper method for class testing. Prints data to the command line.
+     */
     public void printData() {
         printHeader();
         // prints all of the rows
@@ -117,6 +141,12 @@ public class Data {
         }
     }
 
+    /**
+     * Helper method for class testing. Prints data to the command line.
+     * Prints the number of rows specified
+     *
+     * @param count the number of rows to print
+     */
     public void printData(int count) {
         printHeader();
         // caps the count to the max
@@ -129,11 +159,20 @@ public class Data {
         }
     }
 
+    /**
+     * gets the ArrayList representing the row specified
+     *
+     * @param index the row to get the data for
+     * @return ArrayList<String> containg the cell data for the row
+     */
     public ArrayList<String> getRow(int index) {
-        // returns index + 1 to account for header
         return dataPoints.get(index);
     }
 
+    /**
+     * Helper function for testing.
+     * prints the colunn names to the command line
+     */
     public void printHeader() {
         System.out.print("| ");
         int total_width = 2;
@@ -154,6 +193,11 @@ public class Data {
         System.out.println("\n" + new String(char_line));
     }
 
+    /**
+     * Helper method that prints the row specified to the command line
+     *
+     * @param row number that will be printed
+     */
     public void printDataPoint(int index) {
         System.out.print("| ");
         ArrayList<String> row = dataPoints.get(index + 1);
@@ -165,6 +209,11 @@ public class Data {
         System.out.println();
     }
 
+    /**
+     * Sets the initial column widths to the widths of the column names
+     * 
+     * @param line String containing the column header
+     */
     private void setInitialColumnWidth(String line) {
         int count = 3;
         for (int i = 0; i < line.length(); i++) {
@@ -187,6 +236,12 @@ public class Data {
         return columnNames.size();
     }
 
+    /**
+     * Method that sorts the data by the specified column.
+     * Sort method is O(n log n)
+     *
+     * @param column_num column to sort the data based on
+     */
     public void sortByColumn(int column_num) {
         IndexValueData[] array = new IndexValueData[getRowCount()];
         // try to parse into int values and sort
@@ -235,6 +290,13 @@ public class Data {
         dataPoints = newList;
     }
 
+    /**
+     * Method to get all of the unique data points in a colunn.
+     * 
+     * @param column_num the column to get the options for
+     * @return an ArrayList<String> containing all of the unique values in the
+     *         column
+     */
     public ArrayList<String> getColumnOptions(int column_num) {
         ArrayList<String> options = new ArrayList<>();
         String item;
@@ -268,6 +330,14 @@ public class Data {
         return columnNames;
     }
 
+    /**
+     * Method to set the class id variable for the column specified.
+     * Leaves the data as Strings but checks that the values can be converted
+     * to a type other than a String
+     *
+     * @param column_num column to set the class variable of
+     * @param item       the item that is being checked
+     */
     private void updataColumnClass(int column_num, String item) {
         if (columnClass.get(column_num) == String.class) {
             return;
@@ -291,6 +361,10 @@ public class Data {
         }
     }
 
+    /**
+     * Method that iterates through all values of the data and sets the columns data
+     * type according to the data contained in the column
+     */
     private void setColumnTypes() {
         columnClass = new ArrayList<>();
         for (int i = 0; i < columnCount; i++) {
@@ -304,6 +378,9 @@ public class Data {
         }
     }
 
+    /**
+     * Converts all values of "" to 0 in the numeric rows
+     */
     private void convertNumberRows() {
         for (int i = 0; i < getColumnCount(); i++) {
 
@@ -324,6 +401,11 @@ public class Data {
         }
     }
 
+    /**
+     * Gets the dataset
+     *
+     * @retun ArrayList<ArrayList<String>> containing all of the data
+     */
     public ArrayList<ArrayList<String>> getDataPoints() {
         ArrayList<ArrayList<String>> new_data = new ArrayList<>();
         for (ArrayList<String> old_row : dataPoints) {
@@ -337,6 +419,12 @@ public class Data {
         return new_data;
     }
 
+    /**
+     * Method that removes all rows that do not match the catagory specified
+     *
+     * @param column_num column that the catagory is for
+     * @param catagory   the catagory that should be left in the table
+     */
     public void removeAllButCatagory(int column_num, String catagory) {
         for (int i = 0; i < getRowCount();) {
             String value = dataPoints.get(i).get(column_num);
@@ -359,6 +447,12 @@ public class Data {
         }
     }
 
+    /**
+     * Method that removes all rows that do match the catagory specified
+     *
+     * @param column_num column that the catagory is for
+     * @param catagory   the catagory that should not be left in the table
+     */
     public void removeCatagory(int column_num, String catagory) {
         for (int i = 0; i < getRowCount();) {
             String value = dataPoints.get(i).get(column_num);

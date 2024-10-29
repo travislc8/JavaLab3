@@ -1,5 +1,8 @@
 package src.Model;
 
+/**
+ * Tester Class for the data class
+ */
 public class CLITest {
     public static void main(String[] args) {
         DataReader reader = new DataReader();

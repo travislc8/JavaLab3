@@ -2,12 +2,20 @@ package src.Model;
 
 import java.util.Comparator;
 
+/**
+ * Helper class for sorting an ArrayList<ArrayList<String>>. Holds a value for
+ * the inner ArrayList and the index for the location in the outer ArrayList.
+ * Extends Comparator so that the values can be compared when sorting.
+ */
 public class IndexValueData implements Comparable<IndexValueData>, Comparator<IndexValueData> {
     private int index;
     private String stringValue;
     private int numValue;
     private boolean isNumValue;
 
+    /**
+     * Default constructor
+     */
     public IndexValueData() {
         index = 0;
         stringValue = "";
@@ -15,6 +23,9 @@ public class IndexValueData implements Comparable<IndexValueData>, Comparator<In
         isNumValue = false;
     }
 
+    /**
+     * Constructor for values that are strings
+     */
     public IndexValueData(int index, String value) {
         this.index = index;
         this.stringValue = value;
@@ -22,6 +33,9 @@ public class IndexValueData implements Comparable<IndexValueData>, Comparator<In
         isNumValue = false;
     }
 
+    /**
+     * Constructor for values that are integers
+     */
     public IndexValueData(int index, int value) {
         this.index = index;
         this.stringValue = "";

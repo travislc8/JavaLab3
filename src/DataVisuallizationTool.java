@@ -14,11 +14,17 @@ import src.Model.*;
 import src.ViewModel.*;
 
 public class DataVisuallizationTool {
+    // device info to get the screen size
     static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
+    /**
+     * Main Driver of Program
+     * Instantiats the Display Panel which drives the program
+     */
     public static void main(String[] args) {
+        // sets JFrame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenSize.height = screenSize.height - 45;
+        screenSize.setSize(new Dimension(screenSize.width, screenSize.height - 45));
         JFrame frame = new JFrame("Data Visualiztion Tool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(screenSize);
@@ -34,6 +40,9 @@ public class DataVisuallizationTool {
 
     }
 
+    /**
+     * Reads the file and gets the data that the program uses
+     */
     private static ArrayList<String> getData() {
         DataReader reader = new DataReader();
         reader.init();

@@ -2,6 +2,10 @@ package src.Model;
 
 import javax.swing.JCheckBox;
 
+/**
+ * Class that extends JCheckBox and holds a column number that is associated
+ * with the data that the check box is a filter for.
+ */
 public class FilterOption extends JCheckBox {
     int columnNum;
     String value;
