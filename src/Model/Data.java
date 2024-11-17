@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Class that holds data that has row and column data.
  * Allows O(1) access and modification to any data cell
- * Stores Column headers seperate to the data
+ * Stores Column headers separate to the data
  */
 public class Data {
     private int columnCount;
@@ -54,10 +54,10 @@ public class Data {
     public void init(ArrayList<String> fileContents) {
 
         // initializes the column width array
-        setInitialColumnWidth(fileContents.get(0));
+        setInitialColumnWidth(fileContents.getFirst());
 
-        // gets the coumn name data
-        columnNames = extractRowData(fileContents.get(0));
+        // gets the column name data
+        columnNames = extractRowData(fileContents.getFirst());
 
         // add the row data
         for (int i = 1; i < fileContents.size(); i += 1) {
@@ -89,7 +89,7 @@ public class Data {
         // iterates over each row of data and formats the row into a single string
         for (int i = 0; i < row_string.length(); i += 1) {
             letter = row_string.charAt(i);
-            // case column has a , so is wrapped in ""
+            // case column has a so is wrapped in ""
             if (letter == '"') {
                 i += 1;
                 letter = row_string.charAt(i);
@@ -101,7 +101,7 @@ public class Data {
                     letter = row_string.charAt(i);
                 }
             }
-            // adds letter to word if not a ,
+            // adds letter to word if not a
             else if (letter != ',') {
                 word += letter;
             } else {
@@ -122,7 +122,7 @@ public class Data {
      * longer than the current longest value for that column
      *
      * @param word   the String that is added to the column
-     * @param column the colunn the value was added to
+     * @param column the column the value was added to
      */
     private void updateColumnWidth(String word, int column) {
         if (word.length() >= columnWidth.get(column)) {
@@ -135,7 +135,7 @@ public class Data {
      */
     public void printData() {
         printHeader();
-        // prints all of the rows
+        // prints all the rows
         for (int i = 0; i < getRowCount(); i++) {
             printDataPoint(i);
         }
@@ -163,7 +163,7 @@ public class Data {
      * gets the ArrayList representing the row specified
      *
      * @param index the row to get the data for
-     * @return ArrayList<String> containg the cell data for the row
+     * @return ArrayList<String> contain the cell data for the row
      */
     public ArrayList<String> getRow(int index) {
         return dataPoints.get(index);
@@ -171,7 +171,7 @@ public class Data {
 
     /**
      * Helper function for testing.
-     * prints the colunn names to the command line
+     * prints the column names to the command line
      */
     public void printHeader() {
         System.out.print("| ");
@@ -196,7 +196,7 @@ public class Data {
     /**
      * Helper method that prints the row specified to the command line
      *
-     * @param row number that will be printed
+     * @param index number that will be printed
      */
     public void printDataPoint(int index) {
         System.out.print("| ");
@@ -221,7 +221,7 @@ public class Data {
                 count += 1;
         }
 
-        // pre set the column width data
+        // pre-set the column width data
         for (int i = 0; i < count; i++) {
             columnWidth.add(1);
         }
@@ -245,7 +245,7 @@ public class Data {
     public void sortByColumn(int column_num) {
         IndexValueData[] array = new IndexValueData[getRowCount()];
         // try to parse into int values and sort
-        // if fails to parse all of the values, sort as string
+        // if fails to parse all the values, sort as string
         try {
             int num;
             String value;
@@ -254,7 +254,7 @@ public class Data {
             for (int i = 0; i < getRowCount(); i++) {
                 value = dataPoints.get(i).get(column_num);
                 // check if value is blank and make value 0
-                if (value.equals("")) {
+                if (value.isEmpty()) {
                     num = 0;
                 } else {
                     num = Integer.parseInt(value);
@@ -291,10 +291,10 @@ public class Data {
     }
 
     /**
-     * Method to get all of the unique data points in a colunn.
+     * Method to get all the unique data points in a column.
      * 
      * @param column_num the column to get the options for
-     * @return an ArrayList<String> containing all of the unique values in the
+     * @return an ArrayList<String> containing all the unique values in the
      *         column
      */
     public ArrayList<String> getColumnOptions(int column_num) {
@@ -338,12 +338,12 @@ public class Data {
      * @param column_num column to set the class variable of
      * @param item       the item that is being checked
      */
-    private void updataColumnClass(int column_num, String item) {
+    private void updateColumnClass(int column_num, String item) {
         if (columnClass.get(column_num) == String.class) {
             return;
         }
         try {
-            if (!item.equals("")) {
+            if (!item.isEmpty()) {
                 Double.parseDouble(item);
                 if (columnClass.get(column_num) == Integer.class) {
                     columnClass.set(column_num, Double.class);
@@ -351,9 +351,9 @@ public class Data {
             }
         } catch (Exception e1) {
             try {
-                if (!item.equals("")) {
+                if (!item.isEmpty()) {
                     Integer.parseInt(item);
-                    // does noting becuase int is default
+                    // does noting because int is default
                 }
             } catch (Exception e2) {
                 columnClass.set(column_num, String.class);
@@ -373,7 +373,7 @@ public class Data {
 
         for (int i = 0; i < getRowCount(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
-                updataColumnClass(j, dataPoints.get(i).get(j));
+                updateColumnClass(j, dataPoints.get(i).get(j));
             }
         }
     }
@@ -393,7 +393,7 @@ public class Data {
                     continue;
                 }
 
-                if (dataPoints.get(j).get(i).equals("")) {
+                if (dataPoints.get(j).get(i).isEmpty()) {
                     dataPoints.get(j).set(i, "0");
                 }
             }
@@ -404,15 +404,12 @@ public class Data {
     /**
      * Gets the dataset
      *
-     * @retun ArrayList<ArrayList<String>> containing all of the data
+     * @retun ArrayList<ArrayList<String>> containing all the data
      */
     public ArrayList<ArrayList<String>> getDataPoints() {
         ArrayList<ArrayList<String>> new_data = new ArrayList<>();
         for (ArrayList<String> old_row : dataPoints) {
-            var new_row = new ArrayList<String>();
-            for (String word : old_row) {
-                new_row.add(word);
-            }
+            var new_row = new ArrayList<>(old_row);
             new_data.add(new_row);
         }
 
@@ -420,22 +417,22 @@ public class Data {
     }
 
     /**
-     * Method that removes all rows that do not match the catagory specified
+     * Method that removes all rows that do not match the category specified
      *
-     * @param column_num column that the catagory is for
-     * @param catagory   the catagory that should be left in the table
+     * @param column_num column that the category is for
+     * @param category   the category that should be left in the table
      */
-    public void removeAllButCatagory(int column_num, String catagory) {
+    public void removeAllButCategory(int column_num, String category) {
         for (int i = 0; i < getRowCount();) {
             String value = dataPoints.get(i).get(column_num);
-            if (!value.equals(catagory)) {
+            if (!value.equals(category)) {
                 dataPoints.remove(i);
             } else {
                 i += 1;
             }
         }
 
-        if (dataPoints.size() == 0) {
+        if (dataPoints.isEmpty()) {
             var empty_row = new ArrayList<String>();
             for (int i = 0; i < getColumnCount(); i++) {
                 if (getColumnClass(i) != String.class)
@@ -448,22 +445,22 @@ public class Data {
     }
 
     /**
-     * Method that removes all rows that do match the catagory specified
+     * Method that removes all rows that do match the category specified
      *
-     * @param column_num column that the catagory is for
-     * @param catagory   the catagory that should not be left in the table
+     * @param column_num column that the category is for
+     * @param category   the category that should not be left in the table
      */
-    public void removeCatagory(int column_num, String catagory) {
+    public void removeCategory(int column_num, String category) {
         for (int i = 0; i < getRowCount();) {
             String value = dataPoints.get(i).get(column_num);
-            if (value.equals(catagory)) {
+            if (value.equals(category)) {
                 dataPoints.remove(i);
             } else {
                 i += 1;
             }
         }
 
-        if (dataPoints.size() == 0) {
+        if (dataPoints.isEmpty()) {
             var empty_row = new ArrayList<String>();
             for (int i = 0; i < getColumnCount(); i++) {
                 if (getColumnClass(i) != String.class)

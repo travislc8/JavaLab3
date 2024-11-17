@@ -3,7 +3,7 @@ package src.Model;
 import java.util.ArrayList;
 
 /**
- * Helper class for holding a row of a table and its associated colunn name data
+ * Helper class for holding a row of a table and its associated column name data
  */
 public class RowData {
     private int columnCount;

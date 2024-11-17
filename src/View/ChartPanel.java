@@ -3,8 +3,6 @@ package src.View;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -18,7 +16,7 @@ import javax.swing.JPanel;
 /**
  * Class that creates a JPanel that will display a set of data in a chart
  */
-public class ChartPanel extends JPanel implements FilterPanelObserver {
+public class ChartPanel extends JPanel implements TablePanelObserver {
     Dimension panelDimension;
     DataTableModel dataTableModel;
     int xAxisIndex;
@@ -39,14 +37,14 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
         setBackground(Color.white);
         setPreferredSize(panelDimension);
 
-        // defualt vaules for axis of graph
+        // default values for axis of graph
         xAxisIndex = 9;
         yAxisIndex = 11;
 
     }
 
     /**
-     * Sets the data of the charta and displays the chart
+     * Sets the data of the chart and displays the chart
      *
      * @param data data that the chart will display
      */
@@ -129,9 +127,9 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
 
         // finds the average of the values
         for (int i = 0; i < dataTableModel.getRowCount(); i++) {
-            // get the catagory of the row
+            // get the category of the row
             String x_axis_name = dataTableModel.getCell(i, xAxisIndex);
-            // get the category index for adding to the sum of the catagory
+            // get the category index for adding to the sum of the category
             int x_axis_name_index = options.indexOf(x_axis_name);
             // catches if the row name is not an option
             if (x_axis_name_index == -1) {
@@ -140,7 +138,7 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
             }
 
             // gets the value for the row and adds it to the sum
-            sum[x_axis_name_index] += Double.parseDouble(dataTableModel.getCell(i, yAxisIndex));
+            sum[x_axis_name_index] += (int) Double.parseDouble(dataTableModel.getCell(i, yAxisIndex));
             // adds to the count for the category
             count[x_axis_name_index] += 1;
         }
@@ -173,7 +171,7 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
         numeric_column_names.add("Select an Option");
 
         for (int i = 0; i < column_names.size(); i++) {
-            // seperates the columns based on string and numeric types
+            // separates the columns based on string and numeric types
             if (dataTableModel.getColumnClass(i) == String.class) {
                 string_column_names.add(column_names.get(i));
             } else {
@@ -186,7 +184,7 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
         x_axis_options = string_column_names.toArray(x_axis_options);
         xDropDown = new JComboBox<String>(x_axis_options);
         xDropDown.addItemListener(l -> {
-            setAxisCatagory();
+            setAxisCategory();
         });
 
         // y axis drop down
@@ -194,24 +192,24 @@ public class ChartPanel extends JPanel implements FilterPanelObserver {
         y_axis_options = numeric_column_names.toArray(y_axis_options);
         yDropDown = new JComboBox<String>(y_axis_options);
         yDropDown.addItemListener(l -> {
-            setAxisCatagory();
+            setAxisCategory();
         });
 
         // add the elements to the panel
-        controlPanel.add(new JLabel("X-Axis Catagory"));
+        controlPanel.add(new JLabel("X-Axis Category"));
         controlPanel.add(yDropDown);
-        controlPanel.add(new JLabel("Y-Axis Catagory"));
+        controlPanel.add(new JLabel("Y-Axis Category"));
         controlPanel.add(xDropDown);
         this.add(controlPanel);
     }
 
     /**
-     * Method to set a new x or y axis catagory based on user input
+     * Method to set a new x or y axis category based on user input
      */
-    private void setAxisCatagory() {
+    private void setAxisCategory() {
         var columnNames = dataTableModel.getColumnNames();
 
-        // loops through the columns and sets the axis catagories based on the
+        // loops through the columns and sets the axis categories based on the
         // user input
         for (int i = 0; i < columnNames.size(); i++) {
             if (columnNames.get(i).equals(xDropDown.getSelectedItem())) {

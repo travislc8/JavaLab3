@@ -1,10 +1,7 @@
 package src.View;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import src.Model.*;
@@ -16,11 +13,9 @@ import javax.swing.JPanel;
 /**
  * Class that displays the stats of data.
  */
-public class StatsPanel extends JPanel implements FilterPanelObserver {
+public class StatsPanel extends JPanel implements TablePanelObserver {
     Dimension panelDimension;
-    JLabel messageLabel;
     DataTableModel data;
-    int Average;
 
     /**
      * Constructor. Only sets the layout and does not display the panel.
@@ -74,7 +69,7 @@ public class StatsPanel extends JPanel implements FilterPanelObserver {
 
         // gets the columns that stats can be made for
         for (int i = 0; i < column_names.size(); i++) {
-            // seperates the columns based on string and numeric types
+            // separates the columns based on string and numeric types
             if (data.getColumnClass(i) != String.class) {
                 numeric_column_names.add(column_names.get(i));
                 numeric_column_numbers.add(i);
@@ -96,10 +91,10 @@ public class StatsPanel extends JPanel implements FilterPanelObserver {
         }
 
         // iterates through each row in the data
-        Double count_temp = 0.0, sum_temp = 0.0;
+        double sum_temp;
         for (int row = 0; row < data.getRowCount(); row++) {
             // iterates through each column in the row.
-            // Adds to the sum and sets max and min if necissary
+            // Adds to the sum and sets max and min if necessary
             for (int j = 0; j < numeric_column_names.size(); j++) {
                 int column = numeric_column_numbers.get(j);
                 double value = 0.0;
@@ -114,7 +109,7 @@ public class StatsPanel extends JPanel implements FilterPanelObserver {
                 sum_temp = value;
                 sum.set(j, sum_temp + sum.get(j));
 
-                // compares the min and max values and sets if necissary
+                // compares the min and max values and sets if necessary
                 if (min.get(j) > value) {
                     min.set(j, value);
                 }
@@ -163,9 +158,7 @@ public class StatsPanel extends JPanel implements FilterPanelObserver {
      * @param column_num column that should be checked if is double
      */
     private boolean isDoubleValueColumn(int column_num) {
-        if (data.getColumnClass(column_num) == double.class)
-            return true;
-        return false;
+        return data.getColumnClass(column_num) == double.class;
 
     }
 

@@ -1,24 +1,14 @@
 package src.View;
 
-import src.Model.*;
-import src.ViewModel.*;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
- * Class that holds all of the individual parts of the program. Sets up the
+ * Class that holds all the individual parts of the program. Sets up the
  * dependencies between the different parts of the program so that all parts
  * are updated to match the same data set
  */
@@ -31,7 +21,7 @@ public class DisplayPanel extends JPanel {
     Dimension windowDimension;
 
     /**
-     * Constructor. Adds all of the individual panles and displays them.
+     * Constructor. Adds all the individual panels and displays them.
      * Also adds the dependencies between the panels
      */
     public DisplayPanel(Dimension screen_size, ArrayList<String> data) {
@@ -84,11 +74,11 @@ public class DisplayPanel extends JPanel {
      * Helper method to find the appropriate dimension based on the percent
      * of the screen that needs to be filled by a new component
      *
-     * @param percent_width  a decimal value representing the percentage of
-     *                       of the width the new dimension will be of the screen
+     * @param percent_width  a decimal value representing the percentage of * the
+     *                       width the new dimension will be of the screen
      *                       size
-     * @param percent_height a decimal value representing the percentage of
-     *                       of the height the new dimension will be of the screen
+     * @param percent_height a decimal value representing the percentage of * the
+     *                       height the new dimension will be of the screen
      *                       size
      */
     private Dimension getDimension(double percent_width, double percent_height) {

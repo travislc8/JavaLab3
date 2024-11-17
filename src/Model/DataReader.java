@@ -1,10 +1,7 @@
 package src.Model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -19,7 +16,7 @@ public class DataReader {
     private boolean dataRead;
 
     /**
-     * Method to initiat the reading of the file.
+     * Method to initiate the reading of the file.
      */
     public void init() {
         // opens the file and if fails to open, terminates the program
@@ -62,7 +59,7 @@ public class DataReader {
             System.out.println("*****Error reading data file*****");
             var system_properties = System.getProperties();
             var filePath = system_properties.getProperty("user.dir", "not found");
-            System.out.println("Program is lookin for file at: " + filePath + FILENAME);
+            System.out.println("Program is looking for file at: " + filePath + FILENAME);
             System.out.println("Working directory should be .../JavaLabThree,");
             System.out.print("present working directory is: " + filePath);
 

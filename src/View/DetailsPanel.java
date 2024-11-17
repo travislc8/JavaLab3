@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,7 +16,6 @@ import src.Model.RowData;
  */
 public class DetailsPanel extends JPanel {
     Dimension panelDimension;
-    ArrayList<JLabel> data;
 
     /**
      * Constructor only sets the layout of the panel but does not display the
@@ -52,7 +50,7 @@ public class DetailsPanel extends JPanel {
         panel.setLayout(new GridLayout(0, 2));
 
         // iterates through each data point representing a single column
-        // adds the data from the column to the a panel
+        // adds the data from the column to the panel
         for (int i = 0; i < rowData.getColumnCount(); i++) {
             JLabel name = new JLabel(column_names.get(i) + ":");
             JLabel data = new JLabel(column_data.get(i));

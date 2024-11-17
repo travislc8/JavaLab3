@@ -1,7 +1,6 @@
 package src;
 
 import javax.swing.JFrame;
-import javax.swing.JTable;
 
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
@@ -11,21 +10,20 @@ import java.util.ArrayList;
 
 import src.View.*;
 import src.Model.*;
-import src.ViewModel.*;
 
-public class DataVisuallizationTool {
+public class DataVisualizationTool {
     // device info to get the screen size
     static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
     /**
      * Main Driver of Program
-     * Instantiats the Display Panel which drives the program
+     * Instantiates the Display Panel which drives the program
      */
     public static void main(String[] args) {
         // sets JFrame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenSize.setSize(new Dimension(screenSize.width, screenSize.height - 45));
-        JFrame frame = new JFrame("Data Visualiztion Tool");
+        JFrame frame = new JFrame("Data Visualization Tool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(screenSize);
 

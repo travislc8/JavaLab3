@@ -4,7 +4,7 @@ import javax.swing.JComboBox;
 
 /**
  * Helper class that extends JComboBox and holds the index for the column number
- * that the drop down is used to filter
+ * that the drop-down is used to filter
  */
 public class JComboBoxDecorator extends JComboBox<String> {
     int columnNum;

@@ -2,15 +2,11 @@ package src.View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import src.ViewModel.*;
@@ -78,7 +74,7 @@ public class FilterPanel extends JPanel {
     }
 
     /**
-     * Method to set the layout and contents of all of the filters that will
+     * Method to set the layout and contents of all the filters that will
      * be displayed. Will display the filters and set the functionality of the
      * filters
      */
@@ -100,14 +96,13 @@ public class FilterPanel extends JPanel {
             // does not add filters if it is numeric data
             if (filteredData.getColumnClass(i) == Integer.class ||
                     filteredData.getColumnClass(i) == Double.class) {
-                // sets an empty array list as a place holder
+                // sets an empty array list as a placeholder
                 allFilterOptions.add(new ArrayList<>());
                 continue;
             }
 
-            // gets all of the options for the column
+            // gets all the options for the column
             var options = allData.getColumnOptions(i);
-            int count = 0;
             ArrayList<String> options_list = new ArrayList<>();
             for (String option : options) {
                 options_list.add(option);
@@ -119,12 +114,10 @@ public class FilterPanel extends JPanel {
                 continue;
             }
 
-            ArrayList<FilterDecorator> selected_options_list = new ArrayList<>();
-
             // if there are more than 5 options
-            // makes a drop down
+            // makes a drop-down
             if (options.size() > 5) {
-                // panel to hold the drop down
+                // panel to hold the drop-down
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.lightGray);
                 panel.add(new JLabel(allData.getColumnName(i)));
@@ -134,7 +127,7 @@ public class FilterPanel extends JPanel {
                 String[] drop_down_options = new String[options.size()];
                 drop_down_options = options.toArray(drop_down_options);
 
-                // creates the drop down
+                // creates the drop-down
                 JComboBoxDecorator dropDown = new JComboBoxDecorator(i, drop_down_options);
                 dropDown.setSelectedIndex(0);
                 dropDownBoxes.add(dropDown);
@@ -149,7 +142,7 @@ public class FilterPanel extends JPanel {
             }
             // if there were not more than 5 options, uses checkboxes
             else {
-                // sets panel to hold the check boxes
+                // sets panel to hold the checkboxes
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.lightGray);
                 panel.add(new JLabel(allData.getColumnName(i)));
@@ -168,7 +161,7 @@ public class FilterPanel extends JPanel {
             }
         }
 
-        // adds the panel containing all of the filters to the filter panel
+        // adds the panel containing all the filters to the filter panel
         this.add(filterPanel, BorderLayout.CENTER);
 
     }
@@ -182,8 +175,8 @@ public class FilterPanel extends JPanel {
      * data is filtered, the TablePanel is updated.
      */
     private void filterData() {
-        // sets the filtered data to eqaul the complete data set.
-        // Done to reset any previos filtering
+        // sets the filtered data to equal the complete data set.
+        // Done to reset any previous filtering
         filteredData = new DataTableModel(allData);
 
         // finds the number of checkboxes that are checked
@@ -195,13 +188,13 @@ public class FilterPanel extends JPanel {
 
         // if the number of checkboxes is not 0, filter to display the ones
         // that are checked
-        // if zero are checked, all of the data is shown.
+        // if zero are checked, all the data is shown.
         if (num_checked != 0) {
 
             // filter out items not checked
             for (FilterDecorator option : filterCheckBoxes) {
                 if (!option.isSelected()) {
-                    filteredData.removeCatagory(option.getColumnNum(), option.getValue());
+                    filteredData.removeCategory(option.getColumnNum(), option.getValue());
                 }
             }
         }
@@ -213,14 +206,14 @@ public class FilterPanel extends JPanel {
             if (selected_index == 0)
                 continue;
             else {
-                // decriments the index by 1 to account
+                // decrements the index by 1 to account
                 // for the no item selected option
                 selected_index -= 1;
             }
 
             // removes all but the option that was selected
             String selected_option = allFilterOptions.get(drop_down.getColumnNum()).get(selected_index);
-            filteredData.removeAllButCatagory(drop_down.getColumnNum(),
+            filteredData.removeAllButCategory(drop_down.getColumnNum(),
                     selected_option);
         }
 
@@ -229,7 +222,7 @@ public class FilterPanel extends JPanel {
     }
 
     /**
-     * Method to updata all of the dependents when the filtered data is changed
+     * Method to update all the dependents when the filtered data is changed
      */
     private void updateDependents() {
         tablePanel.updateData(filteredData);

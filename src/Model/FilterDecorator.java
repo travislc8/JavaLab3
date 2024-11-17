@@ -4,7 +4,7 @@ import javax.swing.JCheckBox;
 
 /**
  * Class that extends JCheckBox and holds a column number that is associated
- * with the data that the check box is a filter for.
+ * with the data that the checkbox is a filter for.
  */
 public class FilterDecorator extends JCheckBox {
     int columnNum;

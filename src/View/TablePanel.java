@@ -3,25 +3,21 @@ package src.View;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import javax.swing.*;
-import src.View.*;
 import src.Model.*;
 import src.ViewModel.*;
 
 /**
  * Class that displays data in a table form. Uses a JTable in a JScrollPane
- * to display the data. Holds references to depenednet panels to update them
+ * to display the data. Holds references to dependent panels to update them
  * based on the state of the data.
  */
 public class TablePanel extends JPanel {
@@ -30,14 +26,14 @@ public class TablePanel extends JPanel {
     JScrollPane scrollPane;
     private Dimension panelDimension;
     int selectedItem = 0;
-    ArrayList<FilterPanelObserver> observerPanels = new ArrayList<>();
+    ArrayList<TablePanelObserver> observerPanels = new ArrayList<>();
     DetailsPanel detailsPanel;
 
     /**
      * Constructor. Sets the layout of the panel and displays the panel
      *
      * @param dimension dimension that the panel should be
-     * @param data      data the should be displayed in the table
+     * @param data      data that should be displayed in the table
      */
     public TablePanel(Dimension dimension, DataTableModel data) {
         panelDimension = dimension;
@@ -57,7 +53,7 @@ public class TablePanel extends JPanel {
      * Method to set the table. Should be used any time the data is changed.
      */
     private void setTable() {
-        // initializes the tabel
+        // initializes the table
         table = new JTable();
         table.setModel(dataTableModel);
 
@@ -123,10 +119,9 @@ public class TablePanel extends JPanel {
         for (int i = 0; i < dataTableModel.getColumnCount(); i++) {
             row.add(dataTableModel.getValueAt(index, i).toString());
         }
-        // creates a RowData object that holds the relevent data of the selection
-        RowData rowData = new RowData(columnNames, row, row.size());
+        // creates a RowData object that holds the relevant data of the selection
 
-        return rowData;
+        return new RowData(columnNames, row, row.size());
     }
 
     /**
@@ -173,7 +168,7 @@ public class TablePanel extends JPanel {
 
         };
 
-        // adds the proper coparator to each of the columns
+        // adds the proper comparator to each of the columns
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
         for (int i = 0; i < dataTableModel.getColumnCount(); i++) {
             if (dataTableModel.getColumnClass(i) == String.class)
@@ -196,16 +191,14 @@ public class TablePanel extends JPanel {
      * Adds an Observer to the table panel
      *
      */
-    public void addObserver(FilterPanelObserver observer) {
+    public void addObserver(TablePanelObserver observer) {
         observerPanels.add(observer);
         observer.setData(getDataModel());
     }
 
     /**
-     * Method to set all of the dependencies to the panel
+     * Method to set all the dependencies to the panel
      *
-     * @param statsPanel   reference to a StatsPanel
-     * @param chartPanel   reference to a ChartPanel
      * @param detailsPanel reference to a DetailsPanel
      */
     public void addDetailsPanel(DetailsPanel detailsPanel) {
@@ -225,7 +218,7 @@ public class TablePanel extends JPanel {
         this.dataTableModel = new DataTableModel(data);
         updateDetailPanel();
 
-        for (FilterPanelObserver observer : observerPanels) {
+        for (TablePanelObserver observer : observerPanels) {
             observer.setData(dataTableModel);
         }
         setTable();
@@ -240,7 +233,7 @@ public class TablePanel extends JPanel {
     public void updateData(DataTableModel data) {
         this.removeAll();
         this.dataTableModel = new DataTableModel(data);
-        for (FilterPanelObserver observer : observerPanels) {
+        for (TablePanelObserver observer : observerPanels) {
             observer.updateData(this.dataTableModel);
         }
         updateDetailPanel();

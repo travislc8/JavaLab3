@@ -6,13 +6,13 @@ import java.util.Arrays;
  * Helper Util Class
  * Note: this class is no longer used by the program as the sorting
  * functionality was
- * transfered to the JTable.
+ * transferred to the JTable.
  *
  * Contains: sortData method that uses merge sort to sort the data
  */
 public class Util {
     /**
-     * Test dirver
+     * Test driver
      */
     public static void main(String[] args) {
         boolean check = true;
@@ -122,7 +122,7 @@ public class Util {
     }
 
     /**
-     * Pads the given string to make the string length eqaual to length
+     * Pads the given string to make the string length equal to length
      */
     public static String rightPadString(String string, int length) {
         char[] chars = new char[length];
