@@ -6,11 +6,11 @@ import javax.swing.JCheckBox;
  * Class that extends JCheckBox and holds a column number that is associated
  * with the data that the check box is a filter for.
  */
-public class FilterOption extends JCheckBox {
+public class FilterDecorator extends JCheckBox {
     int columnNum;
     String value;
 
-    public FilterOption(int columnNum, String value) {
+    public FilterDecorator(int columnNum, String value) {
         super(value);
         setColumnNum(columnNum);
         setValue(value);

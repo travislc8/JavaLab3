@@ -26,10 +26,10 @@ public class FilterPanel extends JPanel {
     private DataTableModel filteredData;
     private Dimension panelDimension;
     private TablePanel tablePanel;
-    private ArrayList<FilterOption> filterCheckBoxes;
+    private ArrayList<FilterDecorator> filterCheckBoxes;
     private ArrayList<ArrayList<String>> allFilterOptions;
-    private ArrayList<ArrayList<FilterOption>> selectedFilterOptions;
-    private ArrayList<JComboBoxFilter> dropDownBoxes;
+    private ArrayList<ArrayList<FilterDecorator>> selectedFilterOptions;
+    private ArrayList<JComboBoxDecorator> dropDownBoxes;
     final private String noSelectionString = "Select an Option";
 
     /**
@@ -85,7 +85,7 @@ public class FilterPanel extends JPanel {
     private void setFilters() {
         filterCheckBoxes = new ArrayList<>();
         allFilterOptions = new ArrayList<>();
-        dropDownBoxes = new ArrayList<JComboBoxFilter>();
+        dropDownBoxes = new ArrayList<JComboBoxDecorator>();
         selectedFilterOptions = new ArrayList<>();
 
         // iterates through the columns in the table
@@ -119,7 +119,7 @@ public class FilterPanel extends JPanel {
                 continue;
             }
 
-            ArrayList<FilterOption> selected_options_list = new ArrayList<>();
+            ArrayList<FilterDecorator> selected_options_list = new ArrayList<>();
 
             // if there are more than 5 options
             // makes a drop down
@@ -135,7 +135,7 @@ public class FilterPanel extends JPanel {
                 drop_down_options = options.toArray(drop_down_options);
 
                 // creates the drop down
-                JComboBoxFilter dropDown = new JComboBoxFilter(i, drop_down_options);
+                JComboBoxDecorator dropDown = new JComboBoxDecorator(i, drop_down_options);
                 dropDown.setSelectedIndex(0);
                 dropDownBoxes.add(dropDown);
                 // sets the action listener to call the filterData method
@@ -156,7 +156,7 @@ public class FilterPanel extends JPanel {
 
                 // creates a checkbox for each option
                 for (String option : options) {
-                    FilterOption box = new FilterOption(i, option);
+                    FilterDecorator box = new FilterDecorator(i, option);
                     box.setBackground(Color.lightGray);
                     filterCheckBoxes.add(box);
                     box.addItemListener(e -> {
@@ -199,7 +199,7 @@ public class FilterPanel extends JPanel {
         if (num_checked != 0) {
 
             // filter out items not checked
-            for (FilterOption option : filterCheckBoxes) {
+            for (FilterDecorator option : filterCheckBoxes) {
                 if (!option.isSelected()) {
                     filteredData.removeCatagory(option.getColumnNum(), option.getValue());
                 }
@@ -207,7 +207,7 @@ public class FilterPanel extends JPanel {
         }
 
         // filters drop down items
-        for (JComboBoxFilter drop_down : dropDownBoxes) {
+        for (JComboBoxDecorator drop_down : dropDownBoxes) {
             int selected_index = drop_down.getSelectedIndex();
             // if item is not selected
             if (selected_index == 0)
