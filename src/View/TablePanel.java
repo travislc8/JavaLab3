@@ -30,9 +30,8 @@ public class TablePanel extends JPanel {
     JScrollPane scrollPane;
     private Dimension panelDimension;
     int selectedItem = 0;
+    ArrayList<FilterPanelObserver> observerPanels = new ArrayList<>();
     DetailsPanel detailsPanel;
-    StatsPanel statsPanel;
-    ChartPanel chartPanel;
 
     /**
      * Constructor. Sets the layout of the panel and displays the panel
@@ -194,19 +193,24 @@ public class TablePanel extends JPanel {
     }
 
     /**
+     * Adds an Observer to the table panel
+     *
+     */
+    public void addObserver(FilterPanelObserver observer) {
+        observerPanels.add(observer);
+        observer.setData(getDataModel());
+    }
+
+    /**
      * Method to set all of the dependencies to the panel
      *
      * @param statsPanel   reference to a StatsPanel
      * @param chartPanel   reference to a ChartPanel
      * @param detailsPanel reference to a DetailsPanel
      */
-    public void addDependentPanels(StatsPanel statsPanel, ChartPanel chartPanel, DetailsPanel detailsPanel) {
-        this.statsPanel = statsPanel;
-        this.chartPanel = chartPanel;
+    public void addDetailsPanel(DetailsPanel detailsPanel) {
         this.detailsPanel = detailsPanel;
-        this.chartPanel.setData(getDataModel());
         updateDetailPanel();
-        this.statsPanel.updateData(getDataModel());
     }
 
     /**
@@ -220,8 +224,10 @@ public class TablePanel extends JPanel {
         this.removeAll();
         this.dataTableModel = new DataTableModel(data);
         updateDetailPanel();
-        statsPanel.updateData(dataTableModel);
-        chartPanel.setData(dataTableModel);
+
+        for (FilterPanelObserver observer : observerPanels) {
+            observer.setData(dataTableModel);
+        }
         setTable();
         this.repaint();
     }
@@ -234,9 +240,10 @@ public class TablePanel extends JPanel {
     public void updateData(DataTableModel data) {
         this.removeAll();
         this.dataTableModel = new DataTableModel(data);
+        for (FilterPanelObserver observer : observerPanels) {
+            observer.updateData(this.dataTableModel);
+        }
         updateDetailPanel();
-        statsPanel.updateData(dataTableModel);
-        chartPanel.updatDataset(dataTableModel);
         setTable();
         this.repaint();
     }

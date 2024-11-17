@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 /**
  * Class that creates a JPanel that will display a set of data in a chart
  */
-public class ChartPanel extends JPanel {
+public class ChartPanel extends JPanel implements FilterPanelObserver {
     Dimension panelDimension;
     DataTableModel dataTableModel;
     int xAxisIndex;
@@ -110,7 +110,7 @@ public class ChartPanel extends JPanel {
      *
      * @param data the new data set
      */
-    public void updatDataset(DataTableModel data) {
+    public void updateData(DataTableModel data) {
         this.dataTableModel = data;
         updateDataset();
         updatePanel();

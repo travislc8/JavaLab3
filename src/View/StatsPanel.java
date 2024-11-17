@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 /**
  * Class that displays the stats of data.
  */
-public class StatsPanel extends JPanel {
+public class StatsPanel extends JPanel implements FilterPanelObserver {
     Dimension panelDimension;
     JLabel messageLabel;
     DataTableModel data;
@@ -42,6 +42,14 @@ public class StatsPanel extends JPanel {
         updateStats();
         this.revalidate();
         this.repaint();
+    }
+
+    /**
+     * Initial setting of data
+     */
+    @Override
+    public void setData(DataTableModel data) {
+        updateData(data);
     }
 
     /**

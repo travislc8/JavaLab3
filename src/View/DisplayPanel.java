@@ -73,7 +73,9 @@ public class DisplayPanel extends JPanel {
         this.add(left_panel, BorderLayout.LINE_START);
 
         // adds the dependencies between the panels
-        tablePanel.addDependentPanels(statsPanel, chartPanel, detailsPanel);
+        tablePanel.addObserver(chartPanel);
+        tablePanel.addObserver(statsPanel);
+        tablePanel.addDetailsPanel(detailsPanel);
         filterPanel.setTablePanel(tablePanel);
 
     }
